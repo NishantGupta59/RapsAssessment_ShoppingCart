@@ -1,0 +1,73 @@
+﻿@model List<RapsAssessment_ShoppingCart.Models.Product>
+@{
+    ViewData["Title"] = "Product";
+}
+<link href="~/css/product.css" rel="stylesheet" />
+
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        <h2>Product</h2>
+    </div>
+    <div class="col-md-6 text-end d-flex justify-content-end">
+        <div class="position-relative">
+            <a asp-controller="ShoppingCart" asp-action="ViewCart">
+            <i class="bi bi-cart-plus" style="font-size: 1.5rem;"></i>
+                <span id="cart-count" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">0</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Message Display -->
+<div id="message" style="color: red; font-weight: bold; display: none; margin-top: 10px;"></div>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-3">
+            <div class="card" style="width: 18rem;">
+                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                    <p class="card-text"><strong>Price:</strong> Rs.@product.Price</p>
+                    <a href="#" class="btn btn-primary add-to-cart"
+                       data-product-id="@product.Id"
+                       data-product-name="@product.Name"
+                       data-unit-price="@product.Price">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        let cartCount = 0;
+       
+        // Add to cart button click event
+         $(".add-to-cart").click(function (e) {
+            e.preventDefault();
+
+            const productId = $(this).data("product-id");
+            const productName = $(this).data("product-name");
+            const unitPrice = $(this).data("unit-price");
+
+            $.post({
+                url: '@Url.Action("AddToCart", "ShoppingCart")',
+                data: { productId, productName, unitPrice },
+                success: function () { 
+                    cartCount++;     // Update the cart count and show success message
+                    $("#cart-count").text(cartCount);
+                    toastr.success("Added to cart");   //use toastr to display message
+                }
+            });
+        });
+    });
+</script>
+
+
