@@ -1,0 +1,4 @@
+.card:hover {
+	box-shadow: 0 2px 20px 2px lightslategrey;
+	transition: box-shadow 0.3s ease;
+}

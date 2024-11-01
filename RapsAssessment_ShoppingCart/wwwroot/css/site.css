@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+card:hover  {
+    box-shadow: 0 2px 20px 2px lightslategrey
+}
